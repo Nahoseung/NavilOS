@@ -11,6 +11,8 @@ LINKER_SCRIPT = ./navilos.ld
 # 어셈블리 파일, object 파일 목록
 ASM_SRCS = $(wildcard boot/*.S) # 확장자가 S인 파일을 ARM_SRCS 변수에 넣음
 ASM_OBJS = $(patsubst boot/%.S, build/%.o, $(ASM_SRCS)) # S 확장자 파일을 o확장자로 바꾸어 ASM OBJS에 넣음
+
+INC_DIRS = include
 # 최종 목표인 ELF 파일.
 navilos = build/navilos.axf
 navilos_bin = build/navilos.bin 
@@ -38,4 +40,4 @@ $(navilos) : $(ASM_OBJS) $(LINKER_SCRIPT)
 
 build/%.o : boot/%.S 
 	mkdir -p $(shell dirname $@)
-	$(AS) -march=$(ARCH) -mcpu=$(MCPU) -g -o $@ $<
+	$(CC) -march=$(ARCH) -mcpu=$(MCPU) -I $(INC_DIRS) -c -g -o $@ $<
