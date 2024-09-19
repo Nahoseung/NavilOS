@@ -63,6 +63,9 @@
             MSR cpsr, r1 
             LDR sp, =USRSYS_STACK_TOP
 
+            BL  main // label should be in the same file if not label should be a extern label in C and compiler treat function name in C as extern label .
+
+
             dummy_handler:
                 B   .
 .end
