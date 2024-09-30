@@ -1,7 +1,7 @@
 #ifndef HAL_RVPB_UART_H_
 #define HAL_RVPB_UART_H_
 
-
+//data register 
 typedef union UARTDR_t
 {
     uint32_t all;
@@ -12,9 +12,9 @@ typedef union UARTDR_t
         uint32_t BE:1;      // 10
         uint32_t OE:1;      // 11
         uint32_t reserved:20;
-    } bits;
+    } bits; 
 } UARTDR_t;
-
+//status register , error clear registesr 
 typedef union UARTRSR_t
 {
     uint32_t all;
@@ -26,7 +26,7 @@ typedef union UARTRSR_t
         uint32_t reserved:28;
     } bits;
 } UARTRSR_t;
- 
+// flag register
 typedef union UARTFR_t
 {
     uint32_t all;

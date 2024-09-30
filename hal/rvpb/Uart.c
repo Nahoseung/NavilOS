@@ -19,3 +19,25 @@ void Hal_uart_put_char(uint8_t ch)
     Uart->uartdr.all=(ch & 0xFF); // clear the bits bigger than 7bits .(make only 8bits left) 
     // + if replace 0xFF to 0xDF, we can make lower alphabet to capital 
 }
+
+
+uint8_t Hal_uart_get_char(void)
+{
+    uint32_t data;
+
+    while (Uart->uartfr.bits.RXFE); // Check that buffer is Empty 
+
+    data = Uart->uartdr.all; // access to hw reg is heavier tasks than to local var.
+
+    //check for an error flag
+    if(data & 0xFFFFFF00)
+    {
+        //Clear the error (set 아닌가 ?)
+        Uart-> uartrsr.all = 0xFF;
+        return 0;
+    }
+
+    return (uint8_t) (data & 0xFF); //extract data from uartdr register
+
+
+}
