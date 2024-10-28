@@ -33,6 +33,7 @@ void Hal_uart_init(void)
 void Hal_uart_put_char(uint8_t ch)
 {
     while(Uart->uartfr.bits.TXFF); // Until the output buffer is empty
+    // ch=((ch&0xFF)==0x08) ? 0x42: ch;
     Uart->uartdr.all=(ch & 0xFF); // clear the bits bigger than 7bits .(make only 8bits left) 
     // + if replace 0xFF to 0xDF, we can make lower alphabet to capital 
 }
@@ -53,7 +54,7 @@ uint8_t Hal_uart_get_char(void)
         Uart-> uartrsr.all = 0xFF;
         return 0;
     }
-
+    // data= (data==0x08) ? 0x42: data;
     return (uint8_t) (data & 0xFF); //extract data from uartdr register
 
 

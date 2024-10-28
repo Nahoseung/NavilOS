@@ -60,7 +60,7 @@ uint32_t vsprintf(char* buf, const char* format, va_list arg)
                     }
                     break;
                 case 'u':
-                    uint = (uint32_t)va_arg(arg,uint32_t); // how he got argument ?
+                    uint = (uint32_t)va_arg(arg,uint32_t); // how he get argument ?
                     c+= utoa(&buf[c],uint,utoa_dec); // put str at buffer in the utoa func and update state of the buffer
                     break;
                 case 'x':
