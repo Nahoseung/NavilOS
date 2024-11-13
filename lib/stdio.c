@@ -65,7 +65,7 @@ uint32_t vsprintf(char* buf, const char* format, va_list arg)
                     break;
                 case 'x':
                     hex = (uint32_t)va_arg(arg,uint32_t);
-                    c+=utoa(&buf[c],uint,utoa_hex);
+                    c+=utoa(&buf[c],hex,utoa_hex);
                     break;
             }
         }

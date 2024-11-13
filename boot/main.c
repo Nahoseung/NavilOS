@@ -5,16 +5,27 @@
 #include "HalTimer.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "task.h"   
+#include "kernel.h"
+
+#define true 1
+
 
 static void Hw_init(void);
 static void Printf_test(void);
 static void Timer_test(void);
+static void Kernel_init(void);
+
+void User_task0(void);
+void User_task1(void);
+void User_task2(void);
 
 void main(void)
 {
     Hw_init();
 
     uint32_t i=100;
+    debug_printf("0x%x\n",&i);
     while(i--)
     {
         Hal_uart_put_char('-');
@@ -23,18 +34,20 @@ void main(void)
     Hal_uart_put_char('\n');
     putstr("Hello world !\n");
     Printf_test();
+    Kernel_init();
     Timer_test();
-
-    i=5; uint8_t ch;
-    while(i--)
-    {
-        ch = Hal_uart_get_char();
-        Hal_uart_put_char(ch);
-    }
-    Hal_uart_put_char('\n');
-    putstr("goodbye now we're enter into the while loop testing the keyboard interrupt \n");
     while(1);
+    
 
+    // i=5; uint8_t ch;
+    // while(i--)
+    // {
+    //     ch = Hal_uart_get_char();
+    //     Hal_uart_put_char(ch);
+    // }
+    // Hal_uart_put_char('\n');
+    // putstr("goodbye now we're enter into the while loop testing the keyboard interrupt \n");
+    while(1);
 }
 
 static void Hw_init(void)
@@ -61,8 +74,83 @@ static void Printf_test(void)
 }
 
 static void Timer_test(void){
-    while(1){
+    for (uint32_t i =0; i<3; i++){
         debug_printf("current count : %u\n", Hal_timer_get_1ms_counter());
         delay(1000);
     }
+
 }
+
+
+static void Kernel_init(void)
+{
+    uint32_t taskId;
+
+    Kernel_task_init();
+    
+
+    taskId = Kernel_task_create(User_task0);
+
+    if(NOT_ENOUGH_TASK_NUM == taskId)
+    {
+        putstr("Task0 creation fail \n");
+    }
+
+    taskId = Kernel_task_create(User_task1);
+    if(NOT_ENOUGH_TASK_NUM == taskId)
+    {
+        putstr("Task1 creation fail \n");
+    }
+
+    taskId = Kernel_task_create(User_task2);
+    if(NOT_ENOUGH_TASK_NUM == taskId)
+    {
+        putstr("Task2 creation fail \n");
+    }
+
+    Kernel_start();
+}
+
+
+
+void User_task0(void)
+{
+    uint32_t local0 = 0;
+    uint32_t local =0;
+    uint32_t local2=0;
+
+        while(true){
+        debug_printf("User Task#0 SP=0x%x\n", &local0);
+        debug_printf("User Task#0 SP=0x%x\n", &local);
+        debug_printf("User Task#0 SP=0x%x\n", &local2);
+        Kernel_yield(); 
+        }
+        
+
+
+}
+
+void User_task1(void)
+{
+   uint32_t local1 = 0;
+   
+    while(true){
+        debug_printf("User Task#1 SP=0x%x\n", &local1);
+        Kernel_yield();
+    }
+
+}
+
+void User_task2(void)
+{
+    uint32_t local2 = 0;
+    
+    while(true){
+        debug_printf("User Task#2 SP=0x%x\n", &local2);
+        while(1);
+        Kernel_yield();
+    }
+}
+
+
+
