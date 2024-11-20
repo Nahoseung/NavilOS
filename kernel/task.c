@@ -103,11 +103,6 @@ void Kernel_task_Scheduler(void)
     Kernel_task_context_switching();
 }
 
-
-
-
-
-
 /*
 priority scheduler (Not Used)
 */
@@ -128,4 +123,8 @@ priority scheduler (Not Used)
 // }
 
 
+uint32_t Kernel_task_get_current_task_id(void)
+{
+    return sCurrent_tcb_index;
+}
 
